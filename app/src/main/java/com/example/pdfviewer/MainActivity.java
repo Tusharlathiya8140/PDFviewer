@@ -23,8 +23,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int PICK_PDF_FILE = 2;
-    private RecyclerView pdfRecyclerView;
-    private List<Bitmap> pdfPages;
+    private RecyclerView RecyclerView;
+    private List<Bitmap> Pages;
     private PDFAdapter pdfAdapter;
 
 
@@ -35,12 +35,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button btnSelectPdf = findViewById(R.id.btnSelectPdf);
-        pdfRecyclerView = findViewById(R.id.pdfRecyclerView);
+        RecyclerView = findViewById(R.id.pdfRecyclerView);
 
-        pdfPages = new ArrayList<>();
-        pdfAdapter = new PDFAdapter(pdfPages);
-        pdfRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        pdfRecyclerView.setAdapter(pdfAdapter);
+        Pages = new ArrayList<>();
+        pdfAdapter = new PDFAdapter(Pages);
+        RecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.setAdapter(pdfAdapter);
 
         btnSelectPdf.setOnClickListener(v -> openFileChooser());
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             ParcelFileDescriptor parcelFileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
             PdfRenderer pdfRenderer = new PdfRenderer(parcelFileDescriptor);
 
-            pdfPages.clear(); // Clear previous data
+            Pages.clear(); // Clear previous data
 
             for (int i = 0; i < pdfRenderer.getPageCount(); i++) {
                 PdfRenderer.Page page = pdfRenderer.openPage(i);
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
                 page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
 
-                pdfPages.add(bitmap); // Add page to list
+                Pages.add(bitmap); // Add page to list
                 page.close();
             }
 
